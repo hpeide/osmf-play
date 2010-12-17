@@ -8,8 +8,7 @@ package
 	
 	[SWF(frameRate="50", backgroundColor="#000000", width="1440", height="900")]	
 	public class SimplePlayer extends Component
-	{
-		
+	{		
 		public static const PROGRESSIVE_PATH:String = "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";	
 		
 		public var player:MediaPlayerSprite;
