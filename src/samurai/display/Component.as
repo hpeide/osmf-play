@@ -9,6 +9,7 @@ package samurai.display
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.geom.Rectangle;
 	
 	public class Component extends Sprite
 	{
@@ -17,6 +18,15 @@ package samurai.display
 			super();
 			
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		}
+		
+		public function get size():Rectangle 
+		{ 
+			return _size
+		}
+		public function set size(value:Rectangle):void
+		{
+			_size = value;
 		}
 		
 		final public function addResizeHandler():void
@@ -55,5 +65,11 @@ package samurai.display
 		{
 			invalidate();
 		}
+		
+		//
+		// Internal
+		
+		
+		private var _size:Rectangle;	
 	}
 }
