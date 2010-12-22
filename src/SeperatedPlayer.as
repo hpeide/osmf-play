@@ -2,6 +2,7 @@ package
 {
 	import org.osmf.containers.MediaContainer;
 	import org.osmf.elements.LightweightVideoElement;
+	import org.osmf.events.DisplayObjectEvent;
 	import org.osmf.events.MediaPlayerStateChangeEvent;
 	import org.osmf.media.MediaPlayer;
 	import org.osmf.media.URLResource;
@@ -13,13 +14,7 @@ package
 	public class SeperatedPlayer extends Component
 	{
 		
-		public static const PROGRESSIVE_PATH:String = "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";	
-		
-		public var player:MediaPlayer;
-		public var container:MediaContainer;
-		public var resource:URLResource;
-		public var netLoader:NetLoader;
-		public var element:LightweightVideoElement;
+		public static const PROGRESSIVE_PATH:String = "http://mediapm.edgesuite.net/strobe/content/test/AFaerysTale_sylviaApostol_640_500_short.flv";
 		
 		public function SeperatedPlayer()
 		{
@@ -27,14 +22,15 @@ package
 		}
 		
 		protected override function addChildren():void
-		{			
-			resource = new URLResource(PROGRESSIVE_PATH);
-			netLoader = new NetLoader();
-			element = new LightweightVideoElement(resource, netLoader);
+		{
+			element = new LightweightVideoElement(new URLResource(PROGRESSIVE_PATH), new NetLoader())
+			
 			player = new MediaPlayer(element);
 			player.addEventListener(MediaPlayerStateChangeEvent.MEDIA_PLAYER_STATE_CHANGE, onStateChange);
+			
 			container = new MediaContainer();
 			container.addMediaElement(element);
+			container.addEventListener(DisplayObjectEvent.MEDIA_SIZE_CHANGE, onMediaSizeChange);
 			addChild(container)
 			
 			addResizeHandler();
@@ -48,11 +44,22 @@ package
 		
 		private function onStateChange(event:MediaPlayerStateChangeEvent):void	
 		{
-			invalidate();
-			
 			trace ("onStateChange", event.state);
 		}
 		
+		private function onMediaSizeChange(event:DisplayObjectEvent):void
+		{
+			if (event.newWidth > 0 && event.newHeight > 0)
+			{
+				invalidate();
+			}
+		}
 		
+		//
+		// Internal		
+		
+		private var player:MediaPlayer;
+		private var container:MediaContainer;
+		private var element:MediaElement;	
 	}
 }
